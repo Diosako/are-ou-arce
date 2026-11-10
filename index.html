@@ -84,6 +84,11 @@ details p{margin-top:10px;color:var(--muted)}
 .note{font-size:13px;color:var(--muted)}
 a{color:var(--accent)}
 footer{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+.more{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:640px){.more{grid-template-columns:1fr 1fr}}
+.more a{display:flex;flex-direction:column;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;text-decoration:none;color:var(--ink)}
+.more a strong{color:var(--accent)}
+.more a span{font-size:14px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -196,6 +201,14 @@ footer{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:
       <summary>Les mois sans chiffre d'affaires sont-ils perdus ?</summary>
       <p>Non. Un mois à zéro, l'allocation est versée en entier. Les jours non indemnisés un mois où vous facturez sont reportés et allongent la durée de vos droits, dans la limite du plafond.</p>
     </details>
+  </div>
+</section>
+
+<section>
+  <h2>Autres simulateurs</h2>
+  <div class="more">
+    <a href="revenu-net-micro-entrepreneur/"><strong>Revenu net micro-entrepreneur</strong><span>Ce qu'il vous reste après cotisations, impôt et frais.</span></a>
+    <a href="tarif-journalier-freelance/"><strong>Tarif journalier freelance</strong><span>Le prix par jour à facturer pour atteindre le revenu que vous visez.</span></a>
   </div>
 </section>
 

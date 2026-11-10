@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revenu net micro-entrepreneur : simulateur 2026</title>
+<meta name="description" content="Calculez ce qu'il vous reste vraiment en micro-entreprise en 2026 : cotisations Urssaf, formation, impôt, ACRE à 25 % ou 50 %, versement libératoire.">
+<link rel="canonical" href="https://diosako.github.io/are-ou-arce/revenu-net-micro-entrepreneur/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="tag">Simulateur gratuit · barèmes 2026</span>
+  <h1>Micro-entrepreneur : combien vous reste-t-il vraiment ?</h1>
+  <p class="lead">Entrez votre chiffre d'affaires. Le simulateur retire les cotisations Urssaf, la formation professionnelle et l'impôt, et affiche votre revenu net.</p>
+</header>
+
+<div class="tool">
+  <form class="panel" id="form" autocomplete="off">
+    <h2>Votre activité</h2>
+    <div class="field">
+      <label for="ca">Chiffre d'affaires mensuel encaissé (€)</label>
+      <input type="number" id="ca" min="0" step="50" value="3000" inputmode="decimal">
+    </div>
+    <div class="field">
+      <label for="act">Type d'activité</label>
+      <select id="act">
+        <option value="bnc">Activité libérale (BNC) : 25,6 %</option>
+        <option value="bicCom">Services commerciaux (BIC) : 21,2 %</option>
+        <option value="bicArt">Services artisanaux (BIC) : 21,2 %</option>
+        <option value="vente">Vente de marchandises : 12,3 %</option>
+        <option value="cipav">Profession libérale Cipav : 23,2 %</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="acre">ACRE (première année)</label>
+      <select id="acre">
+        <option value="aucune">Pas d'ACRE</option>
+        <option value="apres">Création depuis le 1er juillet 2026 : cotisations réduites de 25 %</option>
+        <option value="avant">Création avant le 1er juillet 2026 : cotisations réduites de 50 %</option>
+      </select>
+    </div>
+    <div class="check">
+      <input type="checkbox" id="vl" checked>
+      <label for="vl">J'ai opté pour le versement libératoire de l'impôt</label>
+    </div>
+    <div class="field" id="tmiField">
+      <label for="tmi">Votre tranche d'imposition</label>
+      <select id="tmi">
+        <option value="0">0 % (non imposable)</option>
+        <option value="0.11" selected>11 %</option>
+        <option value="0.30">30 %</option>
+        <option value="0.41">41 %</option>
+        <option value="0.45">45 %</option>
+      </select>
+      <span class="hint">Sans versement libératoire, l'impôt est estimé sur votre chiffre d'affaires après abattement.</span>
+    </div>
+    <div class="field">
+      <label for="frais">Frais professionnels mensuels (€)</label>
+      <input type="number" id="frais" min="0" step="10" value="100" inputmode="decimal">
+      <span class="hint">Logiciels, assurance, déplacements, banque.</span>
+    </div>
+  </form>
+
+  <div class="results" aria-live="polite">
+    <div class="tiles">
+      <div class="tile net">
+        <h3>Revenu net par mois</h3>
+        <div class="big" id="net">–</div>
+        <ul><li id="netAn"></li></ul>
+      </div>
+      <div class="tile">
+        <h3>Part prélevée sur votre chiffre d'affaires</h3>
+        <div class="big" id="taux">–</div>
+        <ul><li>Cotisations, formation et impôt, hors frais</li></ul>
+      </div>
+    </div>
+    <div class="rows">
+      <div class="row"><span>Chiffre d'affaires</span><span id="rCa"></span></div>
+      <div class="row"><span>Cotisations sociales</span><span id="rCotis"></span></div>
+      <div class="row"><span>Formation professionnelle</span><span id="rCfp"></span></div>
+      <div class="row"><span id="lImpot">Impôt</span><span id="rImpot"></span></div>
+      <div class="row"><span>Frais professionnels</span><span id="rFrais"></span></div>
+      <div class="row total"><span>Reste pour vous</span><span id="rNet"></span></div>
+    </div>
+    <div class="verdict" id="alerte"></div>
+    <p class="note">Estimation indicative. Le calcul de l'impôt sans versement libératoire dépend de l'ensemble des revenus de votre foyer.</p>
+  </div>
+</div>
+
+<section>
+  <h2>Les taux utilisés</h2>
+  <ol class="steps">
+    <li><strong>Cotisations sociales 2026.</strong> 12,3 % pour la vente, 21,2 % pour les services BIC, 25,6 % pour les activités libérales, 23,2 % pour les professions relevant de la Cipav.</li>
+    <li><strong>Formation professionnelle.</strong> 0,1 % pour les commerçants, 0,3 % pour les artisans, 0,2 % pour les libéraux.</li>
+    <li><strong>Versement libératoire.</strong> 1 % en vente, 1,7 % en services BIC, 2,2 % en libéral, prélevés sur le chiffre d'affaires.</li>
+    <li><strong>ACRE.</strong> Pour une création depuis le 1<sup>er</sup> juillet 2026, les cotisations de la première année sont réduites de 25 %. Avant cette date, la réduction était de 50 %.</li>
+    <li><strong>Plafonds 2026.</strong> 203 100 € de chiffre d'affaires annuel en vente, 83 600 € en services et en libéral.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Autres simulateurs</h2>
+  <div class="more">
+    <a href="../tarif-journalier-freelance/"><strong>Tarif journalier freelance</strong><span>Le prix par jour à facturer pour atteindre le revenu que vous visez.</span></a>
+    <a href="../"><strong>ARE ou ARCE</strong><span>Capital ou maintien mensuel de vos allocations chômage.</span></a>
+  </div>
+</section>
+
+<div class="cta">
+  <h2>Votre revenu dépend d'abord de vos clients.</h2>
+  <p>Le Kit 5 Premiers Clients rassemble les messages de prospection et le tableau de suivi pour décrocher vos premières missions en freelance.</p>
+  <a class="btn" href="https://bouzidi837.gumroad.com/l/kit-premiers-clients" target="_blank" rel="noopener">Voir le kit</a>
+</div>
+
+<footer>
+  <span>Sources : <a href="https://www.autoentrepreneur.urssaf.fr/" target="_blank" rel="noopener">Urssaf auto-entrepreneur</a>, <a href="https://entreprendre.service-public.gouv.fr/" target="_blank" rel="noopener">Service-Public Entreprendre</a>. Barèmes en vigueur en novembre 2026.</span>
+  <span>Cet outil ne remplace pas un conseil personnalisé. Aucune donnée saisie ne quitte votre navigateur.</span>
+</footer>
+</div>
+
+<script src="../assets/micro.js"></script>
+<script>
+var eur=new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+var pct=new Intl.NumberFormat('fr-FR',{style:'percent',maximumFractionDigits:1});
+function $(id){return document.getElementById(id)}
+function num(id){var v=parseFloat(String($(id).value).replace(',','.'));return isFinite(v)&&v>0?v:0}
+function render(){
+  var vl=$('vl').checked;
+  $('tmiField').style.display=vl?'none':'flex';
+  var p={ca:num('ca'),act:$('act').value,acre:$('acre').value,vl:vl,tmi:parseFloat($('tmi').value),frais:num('frais')};
+  var r=revenuNet(p);
+  $('net').textContent=eur.format(r.net);
+  $('netAn').textContent=eur.format(r.net*12)+' par an';
+  $('taux').textContent=pct.format(r.taux);
+  $('rCa').textContent=eur.format(p.ca);
+  $('rCotis').textContent='− '+eur.format(r.cotis);
+  $('rCfp').textContent='− '+eur.format(r.cfp);
+  $('lImpot').textContent=vl?'Impôt (versement libératoire)':'Impôt (estimation)';
+  $('rImpot').textContent='− '+eur.format(r.impot);
+  $('rFrais').textContent='− '+eur.format(p.frais);
+  $('rNet').textContent=eur.format(r.net);
+  var a=$('alerte');
+  if(r.depasse){
+    a.className='verdict warn';
+    a.textContent="À ce rythme, votre chiffre d'affaires annuel ("+eur.format(r.caAnnuel)+") dépasse le plafond de la micro-entreprise ("+eur.format(r.plafond)+"). Deux années de dépassement font sortir du régime.";
+  }else{
+    a.className='verdict';
+    a.textContent="Sur 100 € facturés, il vous reste "+eur.format(100*(1-r.taux))+" avant vos frais. Votre chiffre d'affaires annuel ("+eur.format(r.caAnnuel)+") reste sous le plafond de "+eur.format(r.plafond)+".";
+  }
+}
+$('form').addEventListener('input',render);
+$('form').addEventListener('submit',function(e){e.preventDefault()});
+render();
+</script>
+</body>
+</html>

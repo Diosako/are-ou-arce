@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tarif journalier freelance : calculateur de TJM 2026</title>
+<meta name="description" content="Calculez le tarif journalier (TJM) à facturer en micro-entreprise pour atteindre votre revenu net : cotisations 2026, impôt, frais, congés et jours non facturés.">
+<link rel="canonical" href="https://diosako.github.io/are-ou-arce/tarif-journalier-freelance/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="tag">Calculateur gratuit · barèmes 2026</span>
+  <h1>Quel tarif journalier facturer en freelance ?</h1>
+  <p class="lead">Partez du revenu net que vous voulez toucher. Le calculateur remonte jusqu'au tarif par jour, en comptant les charges, les congés et les jours sans client.</p>
+</header>
+
+<div class="tool">
+  <form class="panel" id="form" autocomplete="off">
+    <h2>Votre objectif</h2>
+    <div class="field">
+      <label for="net">Revenu net mensuel visé (€)</label>
+      <input type="number" id="net" min="0" step="100" value="2500" inputmode="decimal">
+    </div>
+    <div class="field">
+      <label for="js">Jours facturés par semaine</label>
+      <input type="number" id="js" min="0.5" max="7" step="0.5" value="3.5" inputmode="decimal">
+      <span class="hint">Le reste part en prospection, devis et administratif.</span>
+    </div>
+    <div class="field">
+      <label for="off">Semaines non travaillées par an</label>
+      <input type="number" id="off" min="0" max="51" step="1" value="7" inputmode="numeric">
+      <span class="hint">Congés, jours fériés, maladie.</span>
+    </div>
+    <div class="field">
+      <label for="act">Type d'activité</label>
+      <select id="act">
+        <option value="bnc">Activité libérale (BNC) : 25,6 %</option>
+        <option value="bicCom">Services commerciaux (BIC) : 21,2 %</option>
+        <option value="bicArt">Services artisanaux (BIC) : 21,2 %</option>
+        <option value="cipav">Profession libérale Cipav : 23,2 %</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="acre">ACRE (première année)</label>
+      <select id="acre">
+        <option value="aucune">Pas d'ACRE</option>
+        <option value="apres">Création depuis le 1er juillet 2026 : cotisations réduites de 25 %</option>
+        <option value="avant">Création avant le 1er juillet 2026 : cotisations réduites de 50 %</option>
+      </select>
+    </div>
+    <div class="check">
+      <input type="checkbox" id="vl" checked>
+      <label for="vl">J'ai opté pour le versement libératoire de l'impôt</label>
+    </div>
+    <div class="field" id="tmiField">
+      <label for="tmi">Votre tranche d'imposition</label>
+      <select id="tmi">
+        <option value="0">0 % (non imposable)</option>
+        <option value="0.11" selected>11 %</option>
+        <option value="0.30">30 %</option>
+        <option value="0.41">41 %</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="frais">Frais professionnels mensuels (€)</label>
+      <input type="number" id="frais" min="0" step="10" value="150" inputmode="decimal">
+    </div>
+  </form>
+
+  <div class="results" aria-live="polite">
+    <div class="tiles">
+      <div class="tile net">
+        <h3>Tarif journalier à facturer</h3>
+        <div class="big" id="tjm">–</div>
+        <ul><li id="horaire"></li></ul>
+      </div>
+      <div class="tile">
+        <h3>Chiffre d'affaires à réaliser</h3>
+        <div class="big" id="caAn">–</div>
+        <ul><li id="caMois"></li><li id="jours"></li></ul>
+      </div>
+    </div>
+    <div class="rows">
+      <div class="row"><span>Tarif prudent (10 % de marge)</span><span id="tPrudent"></span></div>
+      <div class="row"><span>Tarif à la demi-journée</span><span id="tDemi"></span></div>
+      <div class="row"><span>Part du chiffre d'affaires prélevée</span><span id="taux"></span></div>
+    </div>
+    <div class="verdict" id="alerte"></div>
+    <p class="note">Estimation indicative, en franchise de TVA. Une journée est comptée sur 7 heures.</p>
+  </div>
+</div>
+
+<section>
+  <h2>Pourquoi le tarif est plus haut qu'un salaire divisé par 20</h2>
+  <ol class="steps">
+    <li><strong>Vous ne facturez pas tous les jours.</strong> Entre la prospection, les devis et la gestion, un freelance facture rarement plus de 3 à 4 jours par semaine.</li>
+    <li><strong>Vos congés ne sont pas payés.</strong> Chaque semaine sans mission doit être couverte par les autres.</li>
+    <li><strong>Les prélèvements portent sur le chiffre d'affaires.</strong> En 2026, 21,2 % à 25,6 % de cotisations en prestation de services, plus la formation et l'impôt.</li>
+    <li><strong>Vos frais sont à votre charge.</strong> En micro-entreprise, ils ne se déduisent pas : il faut les intégrer au prix.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Autres simulateurs</h2>
+  <div class="more">
+    <a href="../revenu-net-micro-entrepreneur/"><strong>Revenu net micro-entrepreneur</strong><span>Ce qu'il vous reste après cotisations, impôt et frais.</span></a>
+    <a href="../"><strong>ARE ou ARCE</strong><span>Capital ou maintien mensuel de vos allocations chômage.</span></a>
+  </div>
+</section>
+
+<div class="cta">
+  <h2>Un tarif ne sert à rien sans clients pour le payer.</h2>
+  <p>Le Kit 5 Premiers Clients rassemble les messages de prospection et le tableau de suivi pour décrocher vos premières missions en freelance.</p>
+  <a class="btn" href="https://bouzidi837.gumroad.com/l/kit-premiers-clients" target="_blank" rel="noopener">Voir le kit</a>
+</div>
+
+<footer>
+  <span>Sources : <a href="https://www.autoentrepreneur.urssaf.fr/" target="_blank" rel="noopener">Urssaf auto-entrepreneur</a>, <a href="https://entreprendre.service-public.gouv.fr/" target="_blank" rel="noopener">Service-Public Entreprendre</a>. Barèmes en vigueur en novembre 2026.</span>
+  <span>Cet outil ne remplace pas un conseil personnalisé. Aucune donnée saisie ne quitte votre navigateur.</span>
+</footer>
+</div>
+
+<script src="../assets/micro.js"></script>
+<script>
+var eur=new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+var pct=new Intl.NumberFormat('fr-FR',{style:'percent',maximumFractionDigits:1});
+function $(id){return document.getElementById(id)}
+function num(id){var v=parseFloat(String($(id).value).replace(',','.'));return isFinite(v)&&v>0?v:0}
+function render(){
+  var vl=$('vl').checked;
+  $('tmiField').style.display=vl?'none':'flex';
+  var p={net:num('net'),joursSemaine:num('js'),semainesOff:Math.min(num('off'),51),act:$('act').value,acre:$('acre').value,vl:vl,tmi:parseFloat($('tmi').value),frais:num('frais')};
+  var a=$('alerte');
+  if(p.joursSemaine<=0){a.className='verdict warn';a.textContent="Indiquez au moins une demi-journée facturée par semaine.";return}
+  var r=tarifJour(p);
+  $('tjm').textContent=eur.format(Math.ceil(r.tjm/5)*5);
+  $('horaire').textContent='Soit environ '+eur.format(r.horaire)+' de l\'heure';
+  $('caAn').textContent=eur.format(r.caAnnuel);
+  $('caMois').textContent=eur.format(r.caMensuel)+' par mois en moyenne';
+  $('jours').textContent=Math.round(r.jours)+' jours facturés par an';
+  $('tPrudent').textContent=eur.format(Math.ceil(r.tjm*1.1/5)*5);
+  $('tDemi').textContent=eur.format(Math.ceil(r.tjm*0.55/5)*5);
+  $('taux').textContent=pct.format(r.taux);
+  if(r.depasse){
+    a.className='verdict warn';
+    a.textContent="Cet objectif demande "+eur.format(r.caAnnuel)+" de chiffre d'affaires par an, au-dessus du plafond de la micro-entreprise ("+eur.format(r.plafond)+"). Il faudra envisager un autre statut.";
+  }else{
+    a.className='verdict';
+    a.textContent="Pour toucher "+eur.format(p.net)+" net par mois, facturez au moins "+eur.format(Math.ceil(r.tjm/5)*5)+" par jour sur "+Math.round(r.jours)+" jours dans l'année.";
+  }
+}
+$('form').addEventListener('input',render);
+$('form').addEventListener('submit',function(e){e.preventDefault()});
+render();
+</script>
+</body>
+</html>
