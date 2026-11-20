@@ -1,7 +1,7 @@
 """Génère les pages « X € de chiffre d'affaires : combien net ? » à partir des barèmes 2026."""
 import os
 
-BASE = "https://diosako.github.io/are-ou-arce/"
+BASE = "https://combien-net.fr/"
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 
 ACTS = {
