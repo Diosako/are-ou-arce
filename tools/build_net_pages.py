@@ -5,11 +5,53 @@ BASE = "https://combien-net.fr/"
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 
 ACTS = {
-    "activite-liberale": dict(nom="activité libérale", court="libéral (BNC)", cotis=0.256, cfp=0.002, vl=0.022, abatt=0.34, plafond=83600),
-    "prestation-de-services": dict(nom="prestation de services", court="services (BIC)", cotis=0.212, cfp=0.001, vl=0.017, abatt=0.50, plafond=83600),
-    "vente": dict(nom="vente de marchandises", court="vente", cotis=0.123, cfp=0.001, vl=0.010, abatt=0.71, plafond=203100),
+    "activite-liberale": dict(nom="activité libérale", art="à l'activité libérale", court="libéral (BNC)", cotis=0.256, cfp=0.002, vl=0.022, abatt=0.34, plafond=83600,
+                              tva=37500, tva_maj=41250, impot_cat="BNC (bénéfices non commerciaux)"),
+    "prestation-de-services": dict(nom="prestation de services", art="à la prestation de services", court="services (BIC)", cotis=0.212, cfp=0.001, vl=0.017, abatt=0.50, plafond=83600,
+                                   tva=37500, tva_maj=41250, impot_cat="BIC (bénéfices industriels et commerciaux)"),
+    "vente": dict(nom="vente de marchandises", art="à la vente de marchandises", court="vente", cotis=0.123, cfp=0.001, vl=0.010, abatt=0.71, plafond=203100,
+                  tva=85000, tva_maj=93500, impot_cat="BIC (bénéfices industriels et commerciaux)"),
 }
-MONTANTS = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 7000]
+
+# Texte propre à chaque activité, pour que les pages d'un même montant ne se ressemblent pas.
+PROFILS = {
+    "activite-liberale": dict(
+        qui="Ce barème concerne les professions libérales non réglementées affiliées à la Sécurité sociale des indépendants : consultants, formateurs, coachs, développeurs, graphistes, rédacteurs, traducteurs, community managers.",
+        specif="C'est l'activité la plus taxée en micro-entreprise. Les cotisations sociales prennent 25,6 % du chiffre d'affaires et l'abattement fiscal n'est que de 34 %, car l'administration considère que vous avez peu de frais. Les professions réglementées qui cotisent à la CIPAV (architectes, psychologues, ostéopathes…) ont un taux de cotisation un peu différent.",
+        conseil="Comme vous n'achetez presque rien pour travailler, votre marge réelle est proche du net affiché ici. Le levier principal reste votre tarif : comparez avec le <a href=\"../../tarif-journalier-freelance/\">calculateur de tarif journalier</a>.",
+    ),
+    "prestation-de-services": dict(
+        qui="Ce barème concerne les prestations commerciales et artisanales : plombiers, électriciens, coiffeurs, chauffeurs VTC, livreurs, réparateurs, agents de nettoyage, déménageurs.",
+        specif="Les cotisations sociales prennent 21,2 % du chiffre d'affaires et l'abattement fiscal est de 50 %, plus favorable qu'en libéral. La contribution à la formation professionnelle affichée ici (0,1 %) est celle des commerçants ; un artisan inscrit au répertoire des métiers paie 0,3 %, soit quelques euros de plus par mois.",
+        conseil="Ces métiers ont souvent des frais réels (véhicule, carburant, outillage, produits) qui ne sont pas déductibles en micro-entreprise. Retirez-les du net affiché pour connaître ce qui vous reste vraiment.",
+    ),
+    "vente": dict(
+        qui="Ce barème concerne l'achat-revente de marchandises : e-commerce, dropshipping, vente sur les marchés, revente sur Vinted ou Leboncoin à titre professionnel, ainsi que la vente à emporter.",
+        specif="Les cotisations sont les plus basses de la micro-entreprise (12,3 %) parce que le chiffre d'affaires inclut le prix d'achat des marchandises. L'abattement fiscal monte à 71 % pour la même raison.",
+        conseil="Attention, le « net » de cette page est calculé sur le chiffre d'affaires et ne retire pas le coût de vos marchandises. Si vous achetez un produit 60 € pour le revendre 100 €, votre vraie marge est bien plus faible que le résultat affiché.",
+    ),
+}
+LASTMOD = "2026-11-26"
+MONTANTS = [500, 1000, 1500, 2000, 3000, 4000, 5000, 7000]
+# Montants retirés le 26/11/2026 (pages trop proches de leurs voisines) -> redirigés vers le montant le plus proche
+RETIRES = {2500: 2000, 3500: 3000, 6000: 5000}
+
+
+def palier(ca, a, r):
+    an = ca * 12
+    if ca <= 500:
+        return (f"À ce niveau, la micro-entreprise sert souvent d'activité d'appoint, à côté d'un salaire, d'études ou des allocations chômage. "
+                f"Si vous touchez l'ARE, ces {eur(r['net'])} ne s'ajoutent pas simplement à vos allocations : France Travail réduit vos allocations en fonction du chiffre d'affaires que vous déclarez. "
+                f"Le <a href=\"../../\">simulateur ARE ou ARCE</a> vous aide à choisir la formule la plus intéressante.")
+    if ca <= 1500:
+        return (f"Avec {eur(r['net'])} par mois, vous êtes dans la zone où l'activité commence à remplacer un revenu, sans encore permettre de vivre confortablement seul. "
+                f"C'est aussi le niveau où l'ACRE pèse le plus dans le budget : profitez de la première année pour augmenter vos tarifs ou votre nombre de clients.")
+    if ca <= 3000:
+        return (f"{eur(r['net'])} net par mois correspond à une activité principale. Pensez à mettre de côté de quoi couvrir vos congés et les mois creux : "
+                f"un indépendant ne touche rien quand il ne facture pas, et votre retraite se calcule uniquement sur les cotisations versées.")
+    return (f"À {eur(an)} de chiffre d'affaires par an, la question du statut se pose. Au-delà d'un certain niveau de frais réels, une EURL ou une SASU peut devenir plus intéressante que la micro-entreprise, "
+            f"parce que les charges y sont déductibles. Faites le point avec un expert-comptable, surtout si vous approchez du plafond du régime.")
+
 
 
 def eur(v):
@@ -106,6 +148,8 @@ def page(ca, key):
   <p><a href="../../revenu-net-micro-entrepreneur/">Refaire le calcul avec vos propres chiffres dans le simulateur</a>.</p>
 </section>
 
+{specifique(ca, key, r, r_acre, r_sans_vl)}
+
 <section>
   <h2>Et avec un autre chiffre d'affaires ?</h2>
   <div class="rows">
@@ -122,6 +166,75 @@ def page(ca, key):
 </section>
 """
     return h + FOOT
+
+
+def tva_txt(an, a):
+    if an <= a["tva"]:
+        return (f"Sur un an, {eur(an)} de chiffre d'affaires reste sous le seuil de franchise en base de TVA de {eur(a['tva'])} pour cette activité. "
+                f"Vous facturez donc sans TVA, avec la mention « TVA non applicable, art. 293 B du CGI », et le calcul ci-dessus s'applique tel quel. "
+                f"Il vous reste {eur(a['tva'] - an)} de marge annuelle avant d'atteindre ce seuil.")
+    if an <= a["tva_maj"]:
+        return (f"Sur un an, {eur(an)} dépasse le seuil de franchise de TVA ({eur(a['tva'])}) sans atteindre le seuil majoré ({eur(a['tva_maj'])}). "
+                f"Vous gardez la franchise cette année, mais vous devrez facturer la TVA à partir du 1er janvier suivant. "
+                f"Pour ne pas perdre de revenu, il faudra alors augmenter vos prix de 20 % ou accepter que la TVA soit prise sur votre marge.")
+    return (f"Sur un an, {eur(an)} dépasse le seuil majoré de franchise de TVA ({eur(a['tva_maj'])}). "
+            f"Vous devenez redevable de la TVA dès le mois où ce seuil est franchi : vos factures doivent alors inclure 20 % de TVA, à reverser à l'État. "
+            f"Les montants nets de cette page sont calculés sur un chiffre d'affaires hors taxes : si vos clients sont des particuliers et que vos prix TTC ne bougent pas, votre chiffre d'affaires HT baisse d'un sixième.")
+
+
+def specifique(ca, key, r, r_acre, r_sans_vl):
+    a, prof = ACTS[key], PROFILS[key]
+    an = ca * 12
+    gain_acre = r_acre["net"] - r["net"]
+    trimestre = (r["cotis"] + r["cfp"]) * 3
+    part_plafond = an / a["plafond"]
+    autres_act = "\n".join(
+        f'    <div class="row"><a href="../{slug(ca, k)}/">{eur(ca)} en {b["nom"]}</a><span>{eur(calc(ca, b)["net"])} net</span></div>'
+        for k, b in ACTS.items() if k != key)
+    faq = [
+        (f"Combien de cotisations payer chaque trimestre avec {eur(ca)} de chiffre d'affaires mensuel en {a['nom']} ?",
+         f"Si vous déclarez tous les trimestres, vous réglez environ {eur(trimestre)} de cotisations sociales et de formation à l'Urssaf, plus {eur(r['impot'] * 3)} de versement libératoire si vous l'avez choisi."),
+        (f"Combien l'ACRE fait-elle gagner à {eur(ca)} par mois ?",
+         f"Avec l'ACRE, les cotisations sociales baissent de 25 % la première année : le net passe de {eur(r['net'])} à {eur(r_acre['net'])}, soit {eur(gain_acre)} de plus par mois et {eur(gain_acre * 12)} sur l'année."),
+        (f"Faut-il facturer la TVA avec {eur(an)} de chiffre d'affaires annuel en {a['nom']} ?",
+         "Non, vous restez en franchise en base de TVA." if an <= a["tva"] else
+         ("Pas la première année : vous dépassez le seuil de base mais pas le seuil majoré, la TVA s'applique au 1er janvier suivant." if an <= a["tva_maj"] else
+          "Oui : vous dépassez le seuil majoré, la TVA s'applique dès le mois du dépassement.")),
+    ]
+    import json
+    ld = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": rep}} for q, rep in faq]}, ensure_ascii=False)
+    faq_html = "\n".join(f"  <details><summary>{q}</summary><p>{rep}</p></details>" for q, rep in faq)
+    return f"""<section>
+  <h2>Ce qui est propre {a['art']}</h2>
+  <p>{prof['qui']}</p>
+  <p>{prof['specif']} Sans versement libératoire, votre bénéfice est imposé dans la catégorie {a['impot_cat']}.</p>
+  <p>{prof['conseil']}</p>
+</section>
+
+<section>
+  <h2>Que représente {eur(ca)} de chiffre d'affaires par mois ?</h2>
+  <p>{palier(ca, a, r)}</p>
+</section>
+
+<section>
+  <h2>À {eur(ca)} par mois : TVA et plafond de la micro-entreprise</h2>
+  <p>{tva_txt(an, a)}</p>
+  <p>Côté régime, {eur(an)} par an représente {pct(part_plafond)} du plafond de la micro-entreprise pour cette activité ({eur(a['plafond'])}). {"Vous avez de la marge pour développer votre activité sans changer de statut." if part_plafond < 0.6 else ("Vous approchez du plafond : au-delà de deux années de dépassement, vous basculez au régime réel." if part_plafond <= 1 else "Au-delà de deux années consécutives de dépassement, vous sortez du régime micro et passez au régime réel.")}</p>
+</section>
+
+<section>
+  <h2>Le même montant dans les autres activités</h2>
+  <div class="rows">
+{autres_act}
+  </div>
+</section>
+
+<section class="faq">
+  <h2>Questions fréquentes</h2>
+{faq_html}
+</section>
+<script type="application/ld+json">{ld}</script>"""
 
 
 def plafond_txt(an, a):
@@ -187,12 +300,26 @@ def main():
             with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
                 f.write(page(ca, key))
             urls.append(f"net/{slug(ca, key)}/")
-    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    sm += [f"  <url><loc>{BASE}{u}</loc><lastmod>2026-11-10</lastmod></url>" for u in urls]
-    sm.append("</urlset>")
-    with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8") as f:
-        f.write("\n".join(sm) + "\n")
-    print(len(urls), "URL dans le sitemap")
+    for key in ACTS:
+        for old, new in RETIRES.items():
+            d = os.path.join(ROOT, "net", slug(old, key))
+            os.makedirs(d, exist_ok=True)
+            cible = f"{BASE}net/{slug(new, key)}/"
+            with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
+                f.write(f'<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Page déplacée</title>'
+                        f'<link rel="canonical" href="{cible}"><meta name="robots" content="noindex">'
+                        f'<meta http-equiv="refresh" content="0; url={cible}"></head>'
+                        f'<body><p>Cette page a été déplacée : <a href="{cible}">{cible}</a></p></body></html>\n')
+    import re
+    smp = os.path.join(ROOT, "sitemap.xml")
+    sm = open(smp, encoding="utf-8").read()
+    for key in ACTS:
+        for old in RETIRES:
+            sm = re.sub(r"\s*<url><loc>" + re.escape(f"{BASE}net/{slug(old, key)}/") + r"</loc>.*?</url>", "", sm)
+    sm = re.sub(r"(<loc>" + re.escape(BASE) + r"net/[^<]*</loc><lastmod>)[^<]*", r"\g<1>" + LASTMOD, sm)
+    with open(smp, "w", encoding="utf-8") as f:
+        f.write(sm)
+    print(len(urls) - 4, "pages /net/ générées (hors hub)")
 
 
 if __name__ == "__main__":
