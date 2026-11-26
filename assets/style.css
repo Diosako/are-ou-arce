@@ -83,3 +83,13 @@ footer{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:
 .row.total{font-weight:600}
 .tile.net{border-top-color:var(--good)}
 .warn{border-left-color:var(--arce)}
+
+/*seo*/
+.topnav{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;font-size:14px;font-weight:500}
+.topnav a{color:var(--muted);text-decoration:none}
+.topnav a:hover{color:var(--accent)}
+.topnav .brand{font-family:var(--font-display);font-weight:800;font-size:18px;color:var(--ink);margin-right:auto}
+.crumbs{font-size:13px;color:var(--muted)}
+.crumbs a{color:var(--muted)}
+@media (min-width:640px){.allnav .more{grid-template-columns:1fr 1fr 1fr}}
+/*/seo*/
