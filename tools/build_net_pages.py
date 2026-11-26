@@ -32,9 +32,9 @@ PROFILS = {
     ),
 }
 LASTMOD = "2026-11-26"
-MONTANTS = [500, 1000, 1500, 2000, 3000, 4000, 5000, 7000]
+MONTANTS = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 7000]
 # Montants retirés le 26/11/2026 (pages trop proches de leurs voisines) -> redirigés vers le montant le plus proche
-RETIRES = {2500: 2000, 3500: 3000, 6000: 5000}
+RETIRES = {}  # 2500/3500/6000 restaurés le 26/11/2026 : certaines étaient déjà indexées
 
 
 def palier(ca, a, r):
@@ -313,12 +313,13 @@ def main():
     import re
     smp = os.path.join(ROOT, "sitemap.xml")
     sm = open(smp, encoding="utf-8").read()
-    for key in ACTS:
-        for old in RETIRES:
-            sm = re.sub(r"\s*<url><loc>" + re.escape(f"{BASE}net/{slug(old, key)}/") + r"</loc>.*?</url>", "", sm)
-    sm = re.sub(r"(<loc>" + re.escape(BASE) + r"net/[^<]*</loc><lastmod>)[^<]*", r"\g<1>" + LASTMOD, sm)
+    autres = [l for l in sm.splitlines() if "<url>" in l and f"{BASE}net/" not in l]
+    net = [f"  <url><loc>{BASE}{u}</loc><lastmod>{LASTMOD}</lastmod></url>" for u in urls if u.startswith("net/")]
+    i = next(k for k, l in enumerate(autres) if f"<loc>{BASE}tarif-journalier-freelance/" in l or f"<loc>{BASE}combien-facturer-freelance/" in l) + 1
+    i = max(i, next((k + 1 for k, l in enumerate(autres) if f"<loc>{BASE}combien-facturer-freelance/" in l), i))
+    lignes = autres[:i] + net + autres[i:]
     with open(smp, "w", encoding="utf-8") as f:
-        f.write(sm)
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "\n".join(lignes) + "\n</urlset>\n")
     print(len(urls) - 4, "pages /net/ générées (hors hub)")
 
 
