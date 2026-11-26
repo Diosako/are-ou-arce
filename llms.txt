@@ -1,0 +1,20 @@
+# combien-net.fr
+
+> Simulateurs et guides gratuits pour les micro-entrepreneurs et freelances en France, à jour des barèmes Urssaf 2026 : revenu net, tarif journalier (TJM), taux horaire, ARE ou ARCE, versement libératoire.
+
+Chiffres clés 2026 utilisés par le site (cotisations sociales sur le chiffre d'affaires encaissé) : 12,3 % en vente de marchandises, 21,2 % en prestations de services BIC, 25,6 % en activité libérale BNC (23,2 % pour la Cipav). Versement libératoire : 1 %, 1,7 % et 2,2 %. Franchise de TVA : 37 500 € (services et libéral), 85 000 € (vente).
+
+## Simulateurs
+
+- [ARE ou ARCE](https://combien-net.fr/): comparer le capital ARCE et le maintien mensuel de l'ARE à la création d'une micro-entreprise
+- [Revenu net micro-entrepreneur](https://combien-net.fr/revenu-net-micro-entrepreneur/): ce qu'il reste après cotisations, formation, impôt et frais
+- [Tarif journalier freelance](https://combien-net.fr/tarif-journalier-freelance/): le TJM à facturer pour atteindre un revenu net visé
+
+## Guides
+
+- [Revenu net selon le chiffre d'affaires](https://combien-net.fr/net/): tableaux de 500 € à 7 000 € par mois, par type d'activité
+- [Brut / net auto-entrepreneur](https://combien-net.fr/brut-net-auto-entrepreneur/)
+- [Taux horaire freelance](https://combien-net.fr/taux-horaire-freelance/)
+- [Combien facturer en freelance](https://combien-net.fr/combien-facturer-freelance/)
+- [Jours facturés par an](https://combien-net.fr/jours-factures-freelance/)
+- [Versement libératoire](https://combien-net.fr/versement-liberatoire-micro-entreprise/)
